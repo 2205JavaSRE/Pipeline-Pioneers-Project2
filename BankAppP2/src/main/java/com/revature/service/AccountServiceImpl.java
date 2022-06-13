@@ -9,6 +9,7 @@ import com.revature.exceptions.NotApprovedException;
 import com.revature.models.Account;
 import com.revature.models.User;
 import com.revature.models.Transaction;
+import com.revature.models.TransferRequest;
 
 import java.util.List;
 
@@ -23,12 +24,6 @@ public class AccountServiceImpl implements AccountService{
         aDao.insertAccount(a, cList);
         Transaction initialTransaction = new Transaction(a.getAccountId(), "Deposit", startingBalance);
         tDao.addTransaction(initialTransaction);
-
-        for (User c : cList) {
-            c.setPendingAccounts(true);
-            a.setOwner(cList);
-            c.getAccounts().add(a);
-        }
         return a;
     }
 
@@ -77,5 +72,50 @@ public class AccountServiceImpl implements AccountService{
         return tDao.viewTransactionsByAccount(a.getAccountId());
 
     }
+
+
+
+	@Override
+	public void initiateTransfer(TransferRequest tr) {
+		try {
+			this.withdraw(tr.getTransferAmt(), tr.getFromAccount());
+			tDao.intiateTransfer(tr);
+		} catch (InvalidTransactionException e) {
+			e.printStackTrace();
+		} catch (NotApprovedException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+
+
+	@Override
+	public void acceptTransfer(TransferRequest tr) {
+		try {
+			this.deposit(tr.getTransferAmt(), tr.getToAccount());
+			tDao.completeTransfer(tr);
+		} catch (InvalidTransactionException e) {
+			e.printStackTrace();
+		} catch (NotApprovedException e) {
+			e.printStackTrace();
+		}
+	}
+
+
+
+	@Override
+	public void rejectTransfer(TransferRequest tr) {
+		try {
+			this.deposit(tr.getTransferAmt(), tr.getFromAccount());
+			tDao.completeTransfer(tr);
+		} catch (InvalidTransactionException e) {
+			e.printStackTrace();
+		} catch (NotApprovedException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
 
 }

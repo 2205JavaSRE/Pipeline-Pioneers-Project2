@@ -5,7 +5,7 @@ import com.revature.models.Account;
 import com.revature.models.Customer;
 import com.revature.models.Employee;
 import com.revature.models.Transaction;
-import com.revature.service.AccountService;
+import com.revature.service.AccountServiceImpl;
 import com.revature.service.CustomerService;
 import com.revature.service.EmployeeService;
 import com.revature.service.TransactionService;
@@ -21,7 +21,7 @@ public class MainDriver {
 
         Scanner sc = new Scanner(System.in);
         CustomerService cs = new CustomerService();
-        AccountService as = new AccountService();
+        AccountServiceImpl as = new AccountServiceImpl();
         EmployeeService es = new EmployeeService();
         TransactionService ts = new TransactionService();
         // TODO - implement tDao functions into TransactionService

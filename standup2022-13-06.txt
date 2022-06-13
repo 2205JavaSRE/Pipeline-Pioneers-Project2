@@ -1,0 +1,8 @@
+- discussed  inital plan for re-factoring Aaron's
+- broke out the tasks refactoring 
+- we will be utillizing pair-programing
+- Stuart & Ryan: rewrite service layer
+- Aaron & Zach: write controller layer
+- we will be developing the monitoring layer as a group to give us all experiance with that aspect of the program
+- Aaron will be making a dump file of his database to allow us to create a new RDS deployed in kubernetes.
+

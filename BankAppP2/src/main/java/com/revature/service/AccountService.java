@@ -14,4 +14,6 @@ public interface AccountService {
 	public void withdraw(double amount, Account a) throws InvalidTransactionException, NotApprovedException;
 	public List<Account> listAccount(String username);
 	public List<Transaction> listTransactions(Account a);
+	public void transfer(Account from, Account to, double amt);
+	
 }

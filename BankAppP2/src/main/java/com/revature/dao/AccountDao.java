@@ -1,13 +1,13 @@
 package com.revature.dao;
 
 import com.revature.models.Account;
-import com.revature.models.Customer;
+import com.revature.models.User;
 
 import java.util.List;
 
 public interface AccountDao {
 
-    public void insertAccount(Account a, List<Customer> cList);
+    public void insertAccount(Account a, List<User> cList);
 
     public Account selectAccount(int id);
 

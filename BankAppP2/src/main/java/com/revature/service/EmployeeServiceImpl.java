@@ -2,7 +2,7 @@ package com.revature.service;
 
 import com.revature.dao.*;
 import com.revature.models.Account;
-import com.revature.models.Customer;
+import com.revature.models.User;
 import com.revature.models.Employee;
 import com.revature.models.Transaction;
 

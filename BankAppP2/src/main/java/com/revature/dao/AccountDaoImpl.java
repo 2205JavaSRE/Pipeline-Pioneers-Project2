@@ -1,7 +1,7 @@
 package com.revature.dao;
 
 import com.revature.models.Account;
-import com.revature.models.Customer;
+import com.revature.models.User;
 import com.revature.util.ConnectionFactory;
 
 import java.sql.Connection;
@@ -13,7 +13,7 @@ import java.util.List;
 
 public class AccountDaoImpl implements AccountDao{
     @Override
-    public void insertAccount(Account a, List<Customer> cList) {
+    public void insertAccount(Account a, List<User> cList) {
         Connection connection = ConnectionFactory.getConnection();
         String sql = "INSERT INTO project0.accounts VALUES (DEFAULT, null, ?, ?, ?);";
 
@@ -41,7 +41,7 @@ public class AccountDaoImpl implements AccountDao{
         String lastSql = "INSERT INTO project0.users_accounts VALUES (?,?);";
 
         try (PreparedStatement ps3 = connection.prepareStatement(lastSql)) {
-            for (Customer c: cList) {
+            for (User c: cList) {
                 ps3.setInt(1, c.getId());
                 ps3.setInt(2, a.getAccountId());
                 ps3.execute();
@@ -61,7 +61,7 @@ public class AccountDaoImpl implements AccountDao{
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                List<Customer> accountOwners = new ArrayList<>();
+                List<User> accountOwners = new ArrayList<>();
                 String newSql = "SELECT u.user_id, u.username, u.user_password, u.user_fname, u.user_lname  FROM project0.users u\n" +
                         "JOIN project0.users_accounts ua ON u.user_id = ua.user_id \n" +
                         "JOIN project0.accounts a ON ua.account_id = a.account_id \n" +
@@ -70,7 +70,7 @@ public class AccountDaoImpl implements AccountDao{
                     ps2.setInt(1, id);
                     ResultSet rs2 = ps2.executeQuery();
                     while (rs2.next()) {
-                        Customer c = new Customer(rs2.getInt("user_id"),
+                        User c = new User(rs2.getInt("user_id"),
                                 rs2.getString("username"),
                                 rs2.getString("user_password"),
                                 rs2.getString("user_fname"),
@@ -139,7 +139,7 @@ public class AccountDaoImpl implements AccountDao{
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        List<Customer> accountOwners = new ArrayList<>();
+        List<User> accountOwners = new ArrayList<>();
         String newSql = "SELECT u.user_id, u.username, u.user_password, u.user_fname, u.user_lname  FROM project0.users u\n" +
                 "JOIN project0.users_accounts ua ON u.user_id = ua.user_id \n" +
                 "JOIN project0.accounts a ON ua.account_id = a.account_id \n" +
@@ -150,7 +150,7 @@ public class AccountDaoImpl implements AccountDao{
                 ps2.setInt(1, a.getAccountId());
                 rs2 = ps2.executeQuery();
                 while (rs2.next()) {
-                    Customer c = new Customer(rs2.getInt("user_id"),
+                    User c = new User(rs2.getInt("user_id"),
                             rs2.getString("username"),
                             rs2.getString("user_password"),
                             rs2.getString("user_fname"),

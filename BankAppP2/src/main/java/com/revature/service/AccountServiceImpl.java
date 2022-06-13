@@ -7,7 +7,7 @@ import com.revature.dao.TransactionDaoImpl;
 import com.revature.exceptions.InvalidTransactionException;
 import com.revature.exceptions.NotApprovedException;
 import com.revature.models.Account;
-import com.revature.models.Customer;
+import com.revature.models.User;
 import com.revature.models.Transaction;
 
 import java.util.List;
@@ -17,14 +17,14 @@ public class AccountServiceImpl implements AccountService{
     private static final AccountDao aDao = new AccountDaoImpl();
     private static final TransactionDao tDao = new TransactionDaoImpl();
 
-    public Account createAccount(List<Customer> cList, String nickname, String type, double startingBalance) {
+    public Account createAccount(List<User> cList, String nickname, String type, double startingBalance) {
 
         Account a = new Account(nickname, type, startingBalance, cList);
         aDao.insertAccount(a, cList);
         Transaction initialTransaction = new Transaction(a.getAccountId(), "Deposit", startingBalance);
         tDao.addTransaction(initialTransaction);
 
-        for (Customer c : cList) {
+        for (User c : cList) {
             c.setPendingAccounts(true);
             a.setOwner(cList);
             c.getAccounts().add(a);

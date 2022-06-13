@@ -10,7 +10,7 @@ public class Account {
     private String nickname;
     private String type;
     private double balance;
-    private List<Customer> owner;
+    private List<User> owner;
 
     public static final String invalidInitialBalance = "Cannot have a balance less than 0. Initial balance will be set to 0.";
 
@@ -22,7 +22,7 @@ public class Account {
         this.balance = 0;
     }
 
-    public Account(String nickname, String type, double balance, List<Customer> owner) {
+    public Account(String nickname, String type, double balance, List<User> owner) {
         this.nickname = nickname;
         this.type = type;
         this.owner = owner;
@@ -41,7 +41,7 @@ public class Account {
         this.balance = balance;
     }
 
-    public Account(int accountId, boolean approved, String nickname, String type, double balance, List<Customer> owner) {
+    public Account(int accountId, boolean approved, String nickname, String type, double balance, List<User> owner) {
         this.accountId = accountId;
         this.approved = approved;
         this.nickname = nickname;
@@ -92,10 +92,10 @@ public class Account {
     public double getBalance() {
         return balance;
     }
-    public List<Customer> getOwner() {
+    public List<User> getOwner() {
         return owner;
     }
-    public void setOwner(List<Customer> owner) {
+    public void setOwner(List<User> owner) {
         this.owner = owner;
     }
 

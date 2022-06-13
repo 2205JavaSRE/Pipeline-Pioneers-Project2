@@ -1,23 +1,23 @@
 package com.revature.dao;
 
-import com.revature.models.Customer;
+import com.revature.models.User;
 
 import java.util.List;
 
 public interface CustomerDao {
 
     // Insert and update
-    public boolean insertCustomer(Customer c);
+    public boolean insertCustomer(User c);
 
-    public void updateCustomer(Customer oldCust, Customer newCust);
+    public void updateCustomer(User oldCust, User newCust);
 
-    public Customer selectCustomerByUsername(String username);
+    public User selectCustomerByUsername(String username);
 
-    public Customer selectCustomerByLoginInfo(String username, String password);
+    public User selectCustomerByLoginInfo(String username, String password);
 
-    public List<Customer> selectCustomerByName(String lastName, String firstName);
+    public List<User> selectCustomerByName(String lastName, String firstName);
 
-    public List<Customer> selectAllCustomers();
+    public List<User> selectAllCustomers();
 
 
 

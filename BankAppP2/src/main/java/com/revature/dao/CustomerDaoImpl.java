@@ -1,7 +1,7 @@
 package com.revature.dao;
 
 import com.revature.models.Account;
-import com.revature.models.Customer;
+import com.revature.models.User;
 import com.revature.util.ConnectionFactory;
 
 import java.sql.*;
@@ -12,7 +12,7 @@ public class CustomerDaoImpl implements CustomerDao{
 
     public static final AccountDao aDao = new AccountDaoImpl();
     @Override
-    public boolean insertCustomer(Customer c) {
+    public boolean insertCustomer(User c) {
         String sql = "INSERT INTO project0.users (user_type, username, user_password, user_fname, user_lname) VALUES (?,?,?,?,?)";
         Connection connection = ConnectionFactory.getConnection();
 
@@ -49,7 +49,7 @@ public class CustomerDaoImpl implements CustomerDao{
     }
 
     @Override
-    public void updateCustomer(Customer oldCust, Customer newCust) {
+    public void updateCustomer(User oldCust, User newCust) {
         String sql = "UPDATE project0.users SET username = ?, user_password = ?, user_fname = ?, user_lname = ? WHERE username = ?;";
         Connection connection = ConnectionFactory.getConnection();
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -66,8 +66,8 @@ public class CustomerDaoImpl implements CustomerDao{
 
 
     @Override
-    public Customer selectCustomerByUsername(String username) {
-        Customer c = null;
+    public User selectCustomerByUsername(String username) {
+        User c = null;
         Connection connection = ConnectionFactory.getConnection();
         String sql = "SELECT * FROM project0.users WHERE username = ?";
         try(PreparedStatement ps = connection.prepareStatement(sql)){
@@ -76,7 +76,7 @@ public class CustomerDaoImpl implements CustomerDao{
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()){
-                c = new Customer(rs.getInt("user_id"),
+                c = new User(rs.getInt("user_id"),
                                  rs.getString("username"),
                                  rs.getString("user_password"),
                                  rs.getString("user_fname"),
@@ -90,9 +90,9 @@ public class CustomerDaoImpl implements CustomerDao{
     }
 
     @Override
-    public Customer selectCustomerByLoginInfo(String username, String password) {
+    public User selectCustomerByLoginInfo(String username, String password) {
 
-        Customer c = null;
+        User c = null;
         Connection connection = ConnectionFactory.getConnection();
         String sql = "SELECT * FROM project0.users WHERE username = ? AND user_password = ?";
         try(PreparedStatement ps = connection.prepareStatement(sql)){
@@ -102,7 +102,7 @@ public class CustomerDaoImpl implements CustomerDao{
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()){
-                c = new Customer(rs.getInt("user_id"),
+                c = new User(rs.getInt("user_id"),
                         rs.getString("username"),
                         rs.getString("user_password"),
                         rs.getString("user_fname"),
@@ -126,8 +126,8 @@ public class CustomerDaoImpl implements CustomerDao{
     }
 
     @Override
-    public List<Customer> selectCustomerByName(String lastName, String firstName) {
-        List<Customer> customerList = new ArrayList<>();
+    public List<User> selectCustomerByName(String lastName, String firstName) {
+        List<User> customerList = new ArrayList<>();
         Connection connection = ConnectionFactory.getConnection();
         String sql = "SELECT * FROM project0.users WHERE user_fname = ? AND user_lname = ?";
         try(PreparedStatement ps = connection.prepareStatement(sql)){
@@ -137,7 +137,7 @@ public class CustomerDaoImpl implements CustomerDao{
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()){
-                Customer c = new Customer(-1,
+                User c = new User(-1,
                                           rs.getString("username"),
                                           rs.getString("user_password"),
                                           rs.getString("user_fname"),
@@ -152,14 +152,14 @@ public class CustomerDaoImpl implements CustomerDao{
     }
 
     @Override
-    public List<Customer> selectAllCustomers() {
-        List<Customer> cList = new ArrayList<>();
+    public List<User> selectAllCustomers() {
+        List<User> cList = new ArrayList<>();
         String sql = "SELECT * FROM project0.users WHERE user_type = 'customer';";
         Connection connection = ConnectionFactory.getConnection();
         try(PreparedStatement ps = connection.prepareStatement(sql)) {
             ResultSet rs = ps.executeQuery();
             while (rs.next()){
-                Customer c = new Customer(rs.getInt("user_id"),
+                User c = new User(rs.getInt("user_id"),
                                           rs.getString("username"),
                                           rs.getString("user_password"),
                                           rs.getString("user_fname"),

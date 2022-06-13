@@ -1,0 +1,29 @@
+﻿User Stories
+* Showcase our application in postman
+   * As a user, I can register for a customer account (checking or savings or both!).
+   * As a user, I can apply for a joint account
+   * As a user, I can login.
+   * As a customer, I can apply for a new bank account with a starting balance.
+   * As a customer, I can view the balance of a specific account (that belongs to me).
+   * As a customer, I can make a withdrawal or deposit to a specific account (that belongs to me).
+   * As the system, I reject invalid transactions.
+      * Ex:
+         * A withdrawal that would result in a negative balance.
+         * A deposit or withdrawal of negative money
+   * As an employee, I can approve or reject an account registration by a user.
+   * As an employee, I can view a customer's bank accounts.
+   * As a customer, I can post a money transfer to another account.
+   * As a customer, I can accept a money transfer from another account.
+   * An employee, I can view a log of all transactions.
+* Then the rest is from above to show off (from the git P2 page) (no need to show off 6)
+   * Declare SLO
+   * Showcase Grafana
+      * Alerts
+      * Custom metrics
+   * Discuss Jenkins in relation to the DevOps pipeline?
+
+
+
+
+Week 1 by Monday we should do all java programming, some custom metrics or alerts, define SLO. 
+Week 2 Pipeline and Terraform.

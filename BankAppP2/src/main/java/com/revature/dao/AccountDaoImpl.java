@@ -15,7 +15,7 @@ public class AccountDaoImpl implements AccountDao{
     @Override
     public void insertAccount(Account a, List<Customer> cList) {
         Connection connection = ConnectionFactory.getConnection();
-        String sql = "INSERT INTO project0.accounts VALUES (DEFAULT, FALSE, ?, ?, ?);";
+        String sql = "INSERT INTO project0.accounts VALUES (DEFAULT, null, ?, ?, ?);";
 
         try(PreparedStatement ps = connection.prepareStatement(sql)){
             ps.setString(1, a.getNickname());
@@ -94,7 +94,7 @@ public class AccountDaoImpl implements AccountDao{
     @Override
     public List<Account> selectPendingAccounts() {
         List<Account> accountList = new ArrayList<>();
-        String sql = "SELECT * FROM project0.accounts WHERE approved = FALSE;";
+        String sql = "SELECT * FROM project0.accounts WHERE approved = null;";
         Connection connection = ConnectionFactory.getConnection();
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ResultSet rs = ps.executeQuery();
@@ -210,7 +210,7 @@ public class AccountDaoImpl implements AccountDao{
         String sql = "UPDATE project0.accounts SET approved = ? WHERE account_id = ?;";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setBoolean(1, true);
+            ps.setBoolean(1, a.isApproved());
             ps.setInt(2, a.getAccountId());
             ps.execute();
             a.setApproved(true);

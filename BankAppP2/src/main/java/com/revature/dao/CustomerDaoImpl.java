@@ -49,15 +49,15 @@ public class CustomerDaoImpl implements CustomerDao{
     }
 
     @Override
-    public void updateCustomer(Customer c) {
+    public void updateCustomer(Customer oldCust, Customer newCust) {
         String sql = "UPDATE project0.users SET username = ?, user_password = ?, user_fname = ?, user_lname = ? WHERE username = ?;";
         Connection connection = ConnectionFactory.getConnection();
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, c.getUsername());
-            ps.setString(2, c.getPassword());
-            ps.setString(3, c.getFirstName());
-            ps.setString(4, c.getLastName());
-            ps.setString(5, c.getUsername());
+            ps.setString(1, newCust.getUsername());
+            ps.setString(2, newCust.getPassword());
+            ps.setString(3, newCust.getFirstName());
+            ps.setString(4, newCust.getLastName());
+            ps.setString(5, oldCust.getUsername());
             ps.execute();
         } catch (SQLException e) {
             e.printStackTrace();

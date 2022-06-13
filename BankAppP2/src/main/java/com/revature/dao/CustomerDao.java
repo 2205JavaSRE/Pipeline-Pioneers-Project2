@@ -9,7 +9,7 @@ public interface CustomerDao {
     // Insert and update
     public boolean insertCustomer(Customer c);
 
-    public void updateCustomer(Customer c);
+    public void updateCustomer(Customer oldCust, Customer newCust);
 
     public Customer selectCustomerByUsername(String username);
 

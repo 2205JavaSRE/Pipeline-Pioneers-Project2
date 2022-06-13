@@ -28,6 +28,12 @@ public class EmployeeServiceImpl implements EmployeeService{
 		return tDao.viewAllTransactions();
 	}
 
+	@Override
+	public List<Account> listPendingAccounts() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 
 }

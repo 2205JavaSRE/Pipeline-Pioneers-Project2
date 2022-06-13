@@ -10,4 +10,5 @@ public interface EmployeeService {
 	public Employee login(Employee e);
 	public void approveDenyAccount(Account a, Boolean approve);
 	public List<Transaction> listTransactions();
+	public List<Account> listPendingAccounts();
 }

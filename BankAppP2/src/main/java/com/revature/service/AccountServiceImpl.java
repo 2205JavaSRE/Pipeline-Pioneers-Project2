@@ -80,9 +80,7 @@ public class AccountServiceImpl implements AccountService{
 		try {
 			this.withdraw(tr.getTransferAmt(), tr.getFromAccount());
 			tDao.intiateTransfer(tr);
-		} catch (InvalidTransactionException e) {
-			e.printStackTrace();
-		} catch (NotApprovedException e) {
+		} catch (InvalidTransactionException|NotApprovedException e) {
 			e.printStackTrace();
 		}
 		
@@ -95,9 +93,7 @@ public class AccountServiceImpl implements AccountService{
 		try {
 			this.deposit(tr.getTransferAmt(), tr.getToAccount());
 			tDao.completeTransfer(tr);
-		} catch (InvalidTransactionException e) {
-			e.printStackTrace();
-		} catch (NotApprovedException e) {
+		} catch (InvalidTransactionException|NotApprovedException e) {
 			e.printStackTrace();
 		}
 	}
@@ -109,12 +105,24 @@ public class AccountServiceImpl implements AccountService{
 		try {
 			this.deposit(tr.getTransferAmt(), tr.getFromAccount());
 			tDao.completeTransfer(tr);
-		} catch (InvalidTransactionException e) {
+		} catch (InvalidTransactionException|NotApprovedException e) {
 			e.printStackTrace();
-		} catch (NotApprovedException e) {
-			e.printStackTrace();
-		}
+		} 
 		
+	}
+
+
+
+	@Override
+	public List<TransferRequest> getPendingTransfers(Account a) {
+		return tDao.selectPendingTransfersByRecivingAccount(a);
+	}
+
+
+
+	@Override
+	public Account getAccount(int id) {
+		return aDao.selectAccount(id);
 	}
 
 

@@ -1,5 +1,6 @@
 package com.revature.dao;
 
+import com.revature.models.Account;
 import com.revature.models.Transaction;
 import com.revature.models.TransferRequest;
 import com.revature.util.ConnectionFactory;
@@ -9,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class TransactionDaoImpl implements TransactionDao {
@@ -130,6 +132,28 @@ public class TransactionDaoImpl implements TransactionDao {
 	            e.printStackTrace();
 	        }
 		
+	}
+
+	@Override
+	public List<TransferRequest> selectPendingTransfersByRecivingAccount(Account a) {
+		AccountDao aDao = new AccountDaoImpl();
+		String sql = "SELECT * FROM project0.transfer_requests WHERE account_to = ?";
+		List<TransferRequest> transferList = new ArrayList<>();
+		Connection connection = ConnectionFactory.getConnection();
+		try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                TransferRequest tr = new TransferRequest(rs.getInt("transfer_id"), 
+                		false,
+                        rs.getDouble("transfer_amount"),
+                        aDao.selectAccount(rs.getInt("account_from")),
+                        aDao.selectAccount(rs.getInt("account_to")));
+                transferList.add(tr);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+		return transferList;
 	}
 
 	

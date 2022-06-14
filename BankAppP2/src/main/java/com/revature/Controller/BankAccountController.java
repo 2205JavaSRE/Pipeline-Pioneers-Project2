@@ -22,4 +22,10 @@ public class BankAccountController {
 
     public static void updateStatus(Context context) {
     }
+
+    public static void addJointUser(Context context) {
+    }
+
+    public static void transfer(Context context) {
+    }
 }

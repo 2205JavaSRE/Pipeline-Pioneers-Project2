@@ -20,11 +20,7 @@ public class RequestMapping {
         app.get("/api/user/{username}", UserController::getUser);
 
         //Create bank account
-        app.post("/api/bank_account", BankAccountController::createAccount);
-
-        //Add joint owner with bank account and user object.
-        // TODO: 6/13/2022 Implement 
-        app.patch("/api/bank_account/", BankAccountController::addJointUser);
+        app.post("/api/bank_account/", BankAccountController::createAccount);
 
         //Pull bank account(s) from logged-in user.
         app.get("/api/bank_account", BankAccountController::getAccounts);
@@ -43,6 +39,12 @@ public class RequestMapping {
 
         //Transfer money from account A to account B with Amount
         app.post("/api/bank_account/transfer", BankAccountController::transfer);
+
+        //View pending transfers
+        app.get("/api/bank_account/transfer", BankAccountController::viewPendingTransfer);
+
+        //Approve/deny transfer
+        app.patch("/api/bank_account/transfer", BankAccountController::approveDenyTransfer);
 
         //Get all transactions employee-everyone, customer-themselves
         app.get("/api/transaction", TransactionController::getAllTransactions);

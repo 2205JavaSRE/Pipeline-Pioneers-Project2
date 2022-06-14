@@ -22,7 +22,9 @@ public class RequestMapping {
         //Create bank account
         app.post("/api/bank_account", BankAccountController::createAccount);
 
-        // TODO: 6/13/2022 potentially new post for joint?
+        //Add joint owner with bank account and user object.
+        // TODO: 6/13/2022 Implement 
+        app.patch("/api/bank_account/", BankAccountController::addJointUser);
 
         //Pull bank account(s) from logged-in user.
         app.get("/api/bank_account", BankAccountController::getAccounts);
@@ -31,19 +33,21 @@ public class RequestMapping {
         app.get("/api/bank_account/{id}", BankAccountController::getAccount);
 
         //Depositing amount into bank account ID
-        //Discuss whether this is a POST or an PATCH
         app.post("/api/bank_account/deposit", BankAccountController::deposit);
 
         //Withdrawing amount from bank account ID
         app.post("/api/bank_account/withdrawal", BankAccountController::withdrawal);
 
-        //Updating status
+        //Updating status with a bank ID and status
         app.patch("/api/bank_account", BankAccountController::updateStatus);
 
-        // TODO: 6/13/2022 Look at transferring to account or forget it.
+        //Transfer money from account A to account B with Amount
+        app.post("/api/bank_account/transfer", BankAccountController::transfer);
 
+        //Get all transactions employee-everyone, customer-themselves
         app.get("/api/transaction", TransactionController::getAllTransactions);
 
+        //Get all transaction from a select account
         app.get("/api/transaction/{id}", TransactionController::getTransactions);
 
 

@@ -1,6 +1,7 @@
 package com.revature.dao;
 
 import com.revature.models.Transaction;
+import com.revature.models.TransferRequest;
 import com.revature.util.ConnectionFactory;
 
 import java.sql.Connection;
@@ -102,4 +103,34 @@ public class TransactionDaoImpl implements TransactionDao {
         }
         return transactionList;
     }
+
+	@Override
+	public void intiateTransfer(TransferRequest tr) {
+		String sql = "INSERT INTO project0.transfer_requests(account_from, account_to, transfer_amount) "
+				+ "VALUES (?,?,?)";
+		Connection connection = ConnectionFactory.getConnection();
+		 try (PreparedStatement ps = connection.prepareStatement(sql)) {
+	            ps.setInt(1, tr.getFromAccount().getAccountId());
+	            ps.setInt(2, tr.getToAccount().getAccountId());
+	            ps.setDouble(3, tr.getTransferAmt());
+	            ps.execute();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	}
+
+	@Override
+	public void completeTransfer(TransferRequest tr) {
+		String sql = "DELETE FROM project0.transfer_requests WHERE transfer_id = ? ";
+		Connection connection = ConnectionFactory.getConnection();
+		 try (PreparedStatement ps = connection.prepareStatement(sql)) {
+	            ps.setInt(1, tr.getFromAccount().getAccountId());
+	            ps.execute();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+		
+	}
+
+	
 }

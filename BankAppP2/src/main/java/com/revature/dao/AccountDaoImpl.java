@@ -62,7 +62,7 @@ public class AccountDaoImpl implements AccountDao{
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 List<User> accountOwners = new ArrayList<>();
-                String newSql = "SELECT u.user_id, u.username, u.user_password, u.user_fname, u.user_lname  FROM project0.users u\n" +
+                String newSql = "SELECT * FROM project0.users u\n" +
                         "JOIN project0.users_accounts ua ON u.user_id = ua.user_id \n" +
                         "JOIN project0.accounts a ON ua.account_id = a.account_id \n" +
                         "WHERE a.account_id = ?;";
@@ -73,8 +73,7 @@ public class AccountDaoImpl implements AccountDao{
                         User c = new User(rs2.getInt("user_id"),
                                 rs2.getString("username"),
                                 rs2.getString("user_password"),
-                                rs2.getString("user_fname"),
-                                rs2.getString("user_lname"));
+                                rs2.getString("user_type"));
                         accountOwners.add(c);
                     }
                 }
@@ -150,11 +149,10 @@ public class AccountDaoImpl implements AccountDao{
                 ps2.setInt(1, a.getAccountId());
                 rs2 = ps2.executeQuery();
                 while (rs2.next()) {
-                    User c = new User(rs2.getInt("user_id"),
+                	User c = new User(rs2.getInt("user_id"),
                             rs2.getString("username"),
                             rs2.getString("user_password"),
-                            rs2.getString("user_fname"),
-                            rs2.getString("user_lname"));
+                            rs2.getString("user_type"));
                     accountOwners.add(c);
                 }
             } catch (SQLException e) {

@@ -9,9 +9,11 @@ import com.revature.models.User;
 public interface UserService {
 	public void createCustomer(User c);
 	public void updateCustomerInfo(User oldCust, User newCust);
-	public User getCustomer(String username);
+	public User getCustomer(User u);
 	public User login(User c);
 	public void approveDenyAccount(Account a, Boolean approve);
 	public List<Transaction> listTransactions();
 	public List<Account> listPendingAccounts();
+	//TODO: add join user
+	
 }

@@ -89,7 +89,11 @@ public class Account {
         return type;
     }
 
-    public double getBalance() {
+    public void setBalance(double balance) {
+		this.balance = balance;
+	}
+
+	public double getBalance() {
         return balance;
     }
     public List<User> getOwner() {
@@ -99,28 +103,7 @@ public class Account {
         this.owner = owner;
     }
 
-// Other methods
 
-    // TODO - move to Dao/Service classes
-    public TransferRequest transferTo(double amount, Account otherAccount) {
-        TransferRequest transfer = null;
-        if (this.approved) {
-            if (amount >= 0 && amount < this.balance) {
-                transfer = new TransferRequest(amount, this, otherAccount);
-            } else {
-                System.out.println("Invalid transaction: transfer amount must not exceed account balance.");
-            }
-        } else {
-            this.printNotApprovedMessage();
-        }
-        return transfer;
-    }
-
-    public void setBalance(double balance) {
-        this.balance = balance;
-    }
-
-    // TODO - move methods to AccountDaoImp and AccoundService
 
 
 

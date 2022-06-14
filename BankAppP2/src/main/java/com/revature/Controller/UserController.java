@@ -1,8 +1,8 @@
 package com.revature.Controller;
 
-import com.revature.models.Employee;
 import com.revature.models.User;
 import com.revature.service.UserService;
+import com.revature.service.UserServiceImpl;
 import io.javalin.http.Context;
 import io.javalin.http.HttpCode;
 import org.eclipse.jetty.http.HttpStatus;
@@ -14,7 +14,7 @@ public class UserController {
         //Grabbing username and password and setting it in User
         User user = context.bodyAsClass(User.class);
 
-        UserService userService = new UserService();
+        UserService userService = new UserServiceImpl();
         user = userService.login(user);
 
         if (user == null) {
@@ -37,8 +37,8 @@ public class UserController {
         User user = context.bodyAsClass(User.class);
 
         if (verifyUser(context) == null) {
-                  UserService userService = new UserService();
-            if (userService.getCustomer(user.getUsername()) == null) {
+                  UserService userService = new UserServiceImpl();
+            if (userService.getCustomer(user) == null) {
                 //userService.createCustomer(User user);
                 //user = userService.getCustomer(user.getUsername());
                 if (user == null) {
@@ -61,10 +61,10 @@ public class UserController {
     }
 
     public static void getUser(Context context) {
-        UserService userService = new UserService();
-        String username = context.pathParam("username");
+        UserService userService = new UserServiceImpl();
+        User user = context.bodyAsClass(User.class);
 
-        User user = userService.getCustomer(username);
+        user = userService.getCustomer(user);
 
         if (user == null) {
             context.status(HttpCode.NOT_FOUND);

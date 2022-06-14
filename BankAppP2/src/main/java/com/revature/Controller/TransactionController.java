@@ -6,6 +6,7 @@ import com.revature.models.User;
 import com.revature.service.AccountService;
 import com.revature.service.AccountServiceImpl;
 import com.revature.service.UserService;
+import com.revature.service.UserServiceImpl;
 import io.javalin.http.Context;
 import io.javalin.http.HttpCode;
 
@@ -39,7 +40,7 @@ public class TransactionController {
 
             } else { //User is an employee
 
-                UserService userService = new UserService();
+                UserService userService = new UserServiceImpl();
 
                 context.status(HttpCode.ACCEPTED);
                 context.json(userService.listTransactions());
@@ -80,8 +81,19 @@ public class TransactionController {
 
             } else { //Logged in as employee
 
-                context.status(HttpCode.ACCEPTED);
-//                context.json(accountService.listTransactions())
+                Account acc = accountService.getAccount(bankAccountID);
+
+                if (acc != null) {
+
+                    context.json(accountService.getAccount(bankAccountID));
+                    context.status(HttpCode.ACCEPTED);
+
+                } else {
+
+                    context.status(HttpCode.NOT_FOUND);
+                    context.result("Unable to find account.");
+
+                }
 
             }
         }

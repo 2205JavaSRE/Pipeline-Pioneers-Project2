@@ -1,0 +1,3 @@
+- blocker for controller layer: fuctionallity needs to be added to look up accout by ID.
+- Services: refactored for API, working on getting the transfer fuctionallity completed
+- controller: User controller complete, account controller

@@ -18,5 +18,6 @@ public interface AccountService {
 	public void initiateTransfer(TransferRequest tr);
 	public void acceptTransfer(TransferRequest tr);
 	public void rejectTransfer(TransferRequest tr);
-	
+	public List<TransferRequest> getPendingTransfers(Account a);
+	public Account getAccount(int id);
 }

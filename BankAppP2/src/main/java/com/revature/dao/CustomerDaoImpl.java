@@ -1,5 +1,6 @@
 package com.revature.dao;
 
+import com.revature.exceptions.UserExistsException;
 import com.revature.models.Account;
 import com.revature.models.User;
 import com.revature.util.ConnectionFactory;
@@ -12,37 +13,22 @@ public class CustomerDaoImpl implements CustomerDao{
 
     public static final AccountDao aDao = new AccountDaoImpl();
     @Override
-    public boolean insertCustomer(User c) {
-        String sql = "INSERT INTO project0.users (user_type, username, user_password, user_fname, user_lname) VALUES (?,?,?,?,?)";
+    public boolean insertCustomer(User u) throws UserExistsException {
+        String sql = "INSERT INTO project0.users (user_type, username, user_password) VALUES (?,?,?)";
         Connection connection = ConnectionFactory.getConnection();
 
-        if (this.selectCustomerByUsername(c.getUsername()) == null) {
+        if (this.selectCustomerByUsername(u.getUsername()) == null) {
             try(PreparedStatement ps = connection.prepareStatement(sql)){
-                ps.setString(1,"customer");
-                ps.setString(2, c.getUsername());
-                ps.setString(3, c.getPassword());
-                ps.setString(4, c.getFirstName());
-                ps.setString(5, c.getLastName());
+                ps.setString(1, u.getUserType());
+                ps.setString(2, u.getUsername());
+                ps.setString(3, u.getPassword());
                 ps.execute();
-            } catch(SQLException e) {
-                e.printStackTrace();
-            }
-            // The database created a user ID  as a primary key, so now we need to set the customer's ID to match
-            String newSql = "SELECT user_id FROM project0.users WHERE username = ?;";
-            try(PreparedStatement ps = connection.prepareStatement(newSql)) {
-                ps.setString(1, c.getUsername());
-                ResultSet rs = ps.executeQuery();
-                while (rs.next()) {
-                    c.setId(rs.getInt("user_id"));
-                }
-
             } catch(SQLException e) {
                 e.printStackTrace();
             }
             return true;
         } else {
-            System.out.println("Username already exists. Please create a different one.");
-            return false;
+            throw new UserExistsException();
         }
 
 
@@ -50,14 +36,12 @@ public class CustomerDaoImpl implements CustomerDao{
 
     @Override
     public void updateCustomer(User oldCust, User newCust) {
-        String sql = "UPDATE project0.users SET username = ?, user_password = ?, user_fname = ?, user_lname = ? WHERE username = ?;";
+        String sql = "UPDATE project0.users SET username = ?, user_password = ? WHERE username = ?;";
         Connection connection = ConnectionFactory.getConnection();
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, newCust.getUsername());
             ps.setString(2, newCust.getPassword());
-            ps.setString(3, newCust.getFirstName());
-            ps.setString(4, newCust.getLastName());
-            ps.setString(5, oldCust.getUsername());
+            ps.setString(3, oldCust.getUsername());
             ps.execute();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -67,7 +51,7 @@ public class CustomerDaoImpl implements CustomerDao{
 
     @Override
     public User selectCustomerByUsername(String username) {
-        User c = null;
+        User u = null;
         Connection connection = ConnectionFactory.getConnection();
         String sql = "SELECT * FROM project0.users WHERE username = ?";
         try(PreparedStatement ps = connection.prepareStatement(sql)){
@@ -76,23 +60,21 @@ public class CustomerDaoImpl implements CustomerDao{
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()){
-                c = new User(rs.getInt("user_id"),
+                u = new User(rs.getInt("user_id"),
                                  rs.getString("username"),
                                  rs.getString("user_password"),
-                                 rs.getString("user_fname"),
-                                 rs.getString("user_lname"),
-                                 aDao.selectAccountsByUsername(rs.getString("username")));
+                                 rs.getString("user_type"));
             }
         } catch(SQLException e) {
             e.printStackTrace();
         }
-        return c;
+        return u;
     }
 
     @Override
     public User selectCustomerByLoginInfo(String username, String password) {
 
-        User c = null;
+        User u = null;
         Connection connection = ConnectionFactory.getConnection();
         String sql = "SELECT * FROM project0.users WHERE username = ? AND user_password = ?";
         try(PreparedStatement ps = connection.prepareStatement(sql)){
@@ -102,27 +84,15 @@ public class CustomerDaoImpl implements CustomerDao{
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()){
-                c = new User(rs.getInt("user_id"),
+                u = new User(rs.getInt("user_id"),
                         rs.getString("username"),
                         rs.getString("user_password"),
-                        rs.getString("user_fname"),
-                        rs.getString("user_lname"));
+                        rs.getString("user_type"));
             }
         } catch(SQLException e) {
             e.printStackTrace();
         }
-        try {
-            c.setAccounts(aDao.selectAccountsByUsername(c.getUsername()));
-            for (Account a : c.getAccounts()) {
-                if (!a.isApproved()) {
-                    c.setPendingAccounts(true);
-                    break;
-                }
-            }
-        } catch (NullPointerException e) {
-            System.out.println("User info not found");
-        }
-        return c;
+        return u;
     }
 
     @Override
@@ -137,12 +107,10 @@ public class CustomerDaoImpl implements CustomerDao{
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()){
-                User c = new User(-1,
-                                          rs.getString("username"),
-                                          rs.getString("user_password"),
-                                          rs.getString("user_fname"),
-                                          rs.getString("user_lname"),
-                        aDao.selectAccountsByUsername(rs.getString("username")));
+                User c = new User(rs.getInt("user_id"),
+                        rs.getString("username"),
+                        rs.getString("user_password"),
+                        rs.getString("user_type"));
                 customerList.add(c);
             }
         } catch(SQLException e) {
@@ -160,10 +128,9 @@ public class CustomerDaoImpl implements CustomerDao{
             ResultSet rs = ps.executeQuery();
             while (rs.next()){
                 User c = new User(rs.getInt("user_id"),
-                                          rs.getString("username"),
-                                          rs.getString("user_password"),
-                                          rs.getString("user_fname"),
-                                          rs.getString("user_lname"));
+                        rs.getString("username"),
+                        rs.getString("user_password"),
+                        rs.getString("user_type"));
                 cList.add(c);
             }
         } catch (SQLException e) {

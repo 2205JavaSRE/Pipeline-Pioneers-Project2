@@ -1,5 +1,6 @@
 package com.revature.dao;
 
+import com.revature.exceptions.UserExistsException;
 import com.revature.models.User;
 
 import java.util.List;
@@ -7,7 +8,7 @@ import java.util.List;
 public interface CustomerDao {
 
     // Insert and update
-    public boolean insertCustomer(User c);
+    public boolean insertCustomer(User c) throws UserExistsException;
 
     public void updateCustomer(User oldCust, User newCust);
 

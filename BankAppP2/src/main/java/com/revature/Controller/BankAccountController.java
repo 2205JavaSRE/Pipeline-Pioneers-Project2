@@ -3,6 +3,7 @@ package com.revature.Controller;
 import com.revature.exceptions.InvalidTransactionException;
 import com.revature.exceptions.NotApprovedException;
 import com.revature.models.Account;
+import com.revature.models.TransferRequest;
 import com.revature.models.User;
 import com.revature.service.AccountService;
 import com.revature.service.AccountServiceImpl;
@@ -151,11 +152,24 @@ public class BankAccountController {
     }
 
     public static void transfer(Context context) {
+        TransferRequest transferRequest = context.bodyAsClass(TransferRequest.class);
+        accountService.initiateTransfer(transferRequest);
     }
 
     public static void viewPendingTransfer(Context context) {
+        Account account = context.bodyAsClass(Account.class);
+        account = accountService.getAccount(account.getAccountId());
+        List<TransferRequest> pendingTransfers = accountService.getPendingTransfers(account);
+        context.json(pendingTransfers);
+        context.status(HttpCode.OK);
     }
 
     public static void approveDenyTransfer(Context context) {
+        TransferRequest pendingTransfer = context.bodyAsClass(TransferRequest.class);
+        if (pendingTransfer.isApproved()) {
+            accountService.acceptTransfer(pendingTransfer);
+        } else {
+            accountService.rejectTransfer(pendingTransfer);
+        }
     }
 }

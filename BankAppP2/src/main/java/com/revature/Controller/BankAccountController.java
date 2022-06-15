@@ -88,7 +88,7 @@ public class BankAccountController {
                 boolean hasAccess = false;
 
                 for (Account a : userAccounts) {
-                    if (a.getAccountId() == accountId) {
+                    if (a.getId() == accountId) {
                         hasAccess = true;
                         break;
                     }
@@ -136,7 +136,7 @@ public class BankAccountController {
         boolean hasAccess = false;
 
         for (Account a : userAccounts) {
-            if (a.getAccountId() == bankAccountID) {
+            if (a.getId() == bankAccountID) {
                 hasAccess = true;
                 context.status(HttpCode.ACCEPTED);
                 break;
@@ -170,7 +170,7 @@ public class BankAccountController {
         boolean hasAccess = false;
 
         for (Account a : userAccounts) {
-            if (a.getAccountId() == bankAccountID) {
+            if (a.getId() == bankAccountID) {
                 hasAccess = true;
                 context.status(HttpCode.ACCEPTED);
                 break;
@@ -196,30 +196,105 @@ public class BankAccountController {
     }
 
     public static void updateStatus(Context context) {
-        Account updatedAccount = context.bodyAsClass(Account.class);
-        userService.approveDenyAccount(updatedAccount, updatedAccount.isApproved());
-        context.status(HttpCode.ACCEPTED);
+    	User u = context.sessionAttribute("User");
+        if (u.getUserType().equals("employee")) {
+			Account updatedAccount = context.bodyAsClass(Account.class);
+			userService.approveDenyAccount(updatedAccount, updatedAccount.isApproved());
+			context.status(HttpCode.ACCEPTED);
+			context.result("Successfully updated account status");
+		} else {
+			context.status(HttpCode.UNAUTHORIZED);
+			context.result("Must be logged in as an employee.");
+		}
     }
 
     public static void transfer(Context context) {
-        TransferRequest transferRequest = context.bodyAsClass(TransferRequest.class);
-        accountService.initiateTransfer(transferRequest);
+    	
+    	User user = context.sessionAttribute("User");
+    	boolean hasAccess = false;
+    	TransferRequest transferRequest = null;
+        if (user != null) {
+        	List<Account> userAccounts = accountService.listAccount(user.getUsername());
+            transferRequest = context.bodyAsClass(TransferRequest.class);
+            
+			for (Account a : userAccounts) {
+				if (a.getId() == transferRequest.getFromAccount()) {
+					hasAccess = true;
+					context.status(HttpCode.ACCEPTED);
+					break;
+				}
+			} 
+		}
+		if (hasAccess) {
+			accountService.initiateTransfer(transferRequest);
+			context.status(HttpCode.ACCEPTED);
+			context.result("Transfer successfully intiated.");
+        } else {
+        	context.result("You do not have access to initiate a transfer form this account.");
+            context.status(HttpCode.FORBIDDEN);
+        }
     }
 
     public static void viewPendingTransfer(Context context) {
-        Account account = context.bodyAsClass(Account.class);
-        account = accountService.getAccount(account.getAccountId());
-        List<TransferRequest> pendingTransfers = accountService.getPendingTransfers(account);
-        context.json(pendingTransfers);
-        context.status(HttpCode.OK);
+    	User user = context.sessionAttribute("User");
+    	boolean hasAccess = false;
+    	Account account = null;
+        if (user != null) {
+        	List<Account> userAccounts = accountService.listAccount(user.getUsername());
+        	account = context.bodyAsClass(Account.class);
+			for (Account a : userAccounts) {
+				if (a.getId() == account.getId()) {
+					hasAccess = true;
+					break;
+				}
+			} 
+		}
+		if (hasAccess) {
+			
+	        account = accountService.getAccount(account.getId());
+	        List<TransferRequest> pendingTransfers = accountService.getPendingTransfers(account);
+	        context.json(pendingTransfers);
+	        context.status(HttpCode.OK);
+        } else {
+        	context.result("You do not have access to view transfers form this account.");
+            context.status(HttpCode.FORBIDDEN);
+        }
+    	
+
     }
 
     public static void approveDenyTransfer(Context context) {
-        TransferRequest pendingTransfer = context.bodyAsClass(TransferRequest.class);
-        if (pendingTransfer.isApproved()) {
-            accountService.acceptTransfer(pendingTransfer);
+
+    	User user = context.sessionAttribute("User");
+    	boolean hasAccess = false;
+    	TransferRequest transferRequest = null;
+        if (user != null) {
+        	List<Account> userAccounts = accountService.listAccount(user.getUsername());
+            transferRequest = context.bodyAsClass(TransferRequest.class);
+            transferRequest = accountService.getTransferRequestById(transferRequest.getId());
+            
+			for (Account a : userAccounts) {
+				if (a.getId() == transferRequest.getToAccount()) {
+					hasAccess = true;
+					context.status(HttpCode.ACCEPTED);
+					break;
+				}
+			} 
+		}
+		if (hasAccess) {
+			TransferRequest pendingTransfer = context.bodyAsClass(TransferRequest.class);
+	        if (pendingTransfer.isApproved()) {
+	            accountService.acceptTransfer(pendingTransfer);
+	            context.status(HttpCode.ACCEPTED);
+	            context.result("Transfer accepted successfully");
+	        } else {
+	            accountService.rejectTransfer(pendingTransfer);
+	            context.status(HttpCode.ACCEPTED);
+	            context.result("Transfer rejected successfully");
+	        }
         } else {
-            accountService.rejectTransfer(pendingTransfer);
+        	context.result("You do not have access to complete a transfer form this account.");
+            context.status(HttpCode.FORBIDDEN);
         }
     }
 }

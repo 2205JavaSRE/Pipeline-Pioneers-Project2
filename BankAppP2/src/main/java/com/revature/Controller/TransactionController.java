@@ -67,7 +67,7 @@ public class TransactionController {
                 boolean hasAccess = false;
 
                 for (Account a : accountService.listAccount(user.getUsername())) {
-                    if (a.getAccountId() == bankAccountID) {
+                    if (a.getId() == bankAccountID) {
                         hasAccess = true;
                         context.json(accountService.listTransactions(a));
                         context.status(HttpCode.ACCEPTED);

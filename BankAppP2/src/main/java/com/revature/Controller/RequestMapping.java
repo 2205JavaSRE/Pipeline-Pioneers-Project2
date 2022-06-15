@@ -33,18 +33,15 @@ public class RequestMapping {
         //Withdrawing amount from bank account ID
         app.post("/api/bank_account/withdrawal", BankAccountController::withdrawal);
 
-
-        // TODO: 6/15/2022 Update and ensure security
         //Updating status with a bank ID and status
         app.patch("/api/bank_account", BankAccountController::updateStatus);
 
-        // TODO: 6/15/2022 Update and ensure security
         //Transfer money from account A to account B with Amount
         app.post("/api/transfer", BankAccountController::transfer);
-        // TODO: 6/15/2022 Update and ensure security
+        
         //View pending transfers
         app.get("/api/transfer", BankAccountController::viewPendingTransfer);
-        // TODO: 6/15/2022 Update and ensure security
+
         //Approve/deny transfer
         app.patch("/api/transfer", BankAccountController::approveDenyTransfer);
 

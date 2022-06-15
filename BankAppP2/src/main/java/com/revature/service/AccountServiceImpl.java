@@ -22,7 +22,7 @@ public class AccountServiceImpl implements AccountService{
 
         Account a = new Account(nickname, type, startingBalance, cList);
         aDao.insertAccount(a, cList);
-        Transaction initialTransaction = new Transaction(a.getAccountId(), "Deposit", startingBalance);
+        Transaction initialTransaction = new Transaction(a.getId(), "Deposit", startingBalance);
         tDao.addTransaction(initialTransaction);
         return a;
     }
@@ -34,7 +34,7 @@ public class AccountServiceImpl implements AccountService{
             if (amount >= 0) {
                 a.setBalance(a.getBalance() + amount);
                 aDao.updateAccountBalance(a);
-                Transaction t = new Transaction(a.getAccountId(), "Deposit", amount);
+                Transaction t = new Transaction(a.getId(), "Deposit", amount);
                 tDao.addTransaction(t);
             } else {
                 throw new InvalidTransactionException();
@@ -51,7 +51,7 @@ public class AccountServiceImpl implements AccountService{
                 a.setBalance(a.getBalance() - amount);
                 // Just forgot this line of code... balance was not being updated in the database
                 aDao.updateAccountBalance(a);
-                Transaction t = new Transaction(a.getAccountId(), "Withdrawal", amount);
+                Transaction t = new Transaction(a.getId(), "Withdrawal", amount);
                 tDao.addTransaction(t);
             } else {
                 throw new InvalidTransactionException();
@@ -69,7 +69,7 @@ public class AccountServiceImpl implements AccountService{
     }
     
     public List<Transaction> listTransactions(Account a) {
-        return tDao.viewTransactionsByAccount(a.getAccountId());
+        return tDao.viewTransactionsByAccount(a.getId());
 
     }
 
@@ -125,6 +125,13 @@ public class AccountServiceImpl implements AccountService{
 	@Override
 	public Account getAccount(int id) {
 		return aDao.selectAccount(id);
+	}
+
+
+
+	@Override
+	public TransferRequest getTransferRequestById(int id) {
+		return tDao.selectTransferRequestById(id);
 	}
 
 

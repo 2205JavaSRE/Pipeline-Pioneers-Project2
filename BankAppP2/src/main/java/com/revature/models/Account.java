@@ -5,7 +5,7 @@ import java.util.List;
 public class Account {
 
 // Initial variables
-    private int accountId;
+    private int id;
     private boolean approved;
     private String nickname;
     private String type;
@@ -34,7 +34,7 @@ public class Account {
     }
 
     public Account(int accountId, boolean approved, String nickname, String type, double balance) {
-        this.accountId = accountId;
+        this.id = accountId;
         this.approved = approved;
         this.nickname = nickname;
         this.type = type;
@@ -42,7 +42,7 @@ public class Account {
     }
 
     public Account(int accountId, boolean approved, String nickname, String type, double balance, List<User> owner) {
-        this.accountId = accountId;
+        this.id = accountId;
         this.approved = approved;
         this.nickname = nickname;
         this.type = type;
@@ -57,12 +57,12 @@ public class Account {
 // Getters and Setters    
 
 
-    public int getAccountId() {
-        return accountId;
+    public int getId() {
+        return id;
     }
 
-    public void setAccountId(int accountId) {
-        this.accountId = accountId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public boolean isApproved() {
@@ -114,7 +114,7 @@ public class Account {
     @Override
     public String toString() {
         return "Account{" +
-                "accountId=" + accountId +
+                "accountId=" + id +
                 ", approved=" + approved +
                 ", nickname='" + nickname + '\'' +
                 ", type='" + type + '\'' +

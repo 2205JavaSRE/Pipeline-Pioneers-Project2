@@ -20,4 +20,5 @@ public interface AccountService {
 	public void rejectTransfer(TransferRequest tr);
 	public List<TransferRequest> getPendingTransfers(Account a);
 	public Account getAccount(int id);
+	public TransferRequest getTransferRequestById(int id);
 }

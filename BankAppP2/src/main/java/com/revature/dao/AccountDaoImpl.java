@@ -32,7 +32,7 @@ public class AccountDaoImpl implements AccountDao{
         try(PreparedStatement ps2 = connection.prepareStatement(newSql)) {
             ResultSet rs2 = ps2.executeQuery();
             while (rs2.next()) {
-                a.setAccountId(rs2.getInt("max"));
+                a.setId(rs2.getInt("max"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -43,7 +43,7 @@ public class AccountDaoImpl implements AccountDao{
         try (PreparedStatement ps3 = connection.prepareStatement(lastSql)) {
             for (User c: cList) {
                 ps3.setInt(1, c.getId());
-                ps3.setInt(2, a.getAccountId());
+                ps3.setInt(2, a.getId());
                 ps3.execute();
             }
 
@@ -146,7 +146,7 @@ public class AccountDaoImpl implements AccountDao{
         ResultSet rs2;
         for (Account a : accountList) {
             try (PreparedStatement ps2 = connection.prepareStatement(newSql)) {
-                ps2.setInt(1, a.getAccountId());
+                ps2.setInt(1, a.getId());
                 rs2 = ps2.executeQuery();
                 while (rs2.next()) {
                 	User c = new User(rs2.getInt("user_id"),
@@ -195,7 +195,7 @@ public class AccountDaoImpl implements AccountDao{
 
         try(PreparedStatement ps = connection.prepareStatement(sql)){
             ps.setDouble(1, a.getBalance());
-            ps.setInt(2, a.getAccountId());
+            ps.setInt(2, a.getId());
             ps.execute();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -209,7 +209,7 @@ public class AccountDaoImpl implements AccountDao{
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setBoolean(1, a.isApproved());
-            ps.setInt(2, a.getAccountId());
+            ps.setInt(2, a.getId());
             ps.execute();
             a.setApproved(true);
         } catch (SQLException e) {

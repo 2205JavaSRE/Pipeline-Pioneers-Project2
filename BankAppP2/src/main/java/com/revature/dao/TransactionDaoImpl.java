@@ -141,7 +141,7 @@ public class TransactionDaoImpl implements TransactionDao {
 		List<TransferRequest> transferList = new ArrayList<>();
 		Connection connection = ConnectionFactory.getConnection();
 		try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setInt(1, a.getAccountId());
+            ps.setInt(1, a.getId());
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 TransferRequest tr = new TransferRequest(rs.getInt("transfer_id"), 

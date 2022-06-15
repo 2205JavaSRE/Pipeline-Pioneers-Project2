@@ -63,19 +63,28 @@ public class UserController {
     public static void getUser(Context context) {
         UserService userService = new UserServiceImpl();
 
-        User user = new User();
-        user.setUsername(context.pathParam("username"));
+        User loggedInUser = verifyUser(context);
 
-        // TODO: 6/15/2022 make sure employee can view all, customer only views themselves.
-        user = userService.getCustomer(user);
-        user.setPassword(null);
+        if (loggedInUser != null && loggedInUser.getUserType().equals("customer")) {
+            context.json(loggedInUser);
+        } else if (loggedInUser != null && loggedInUser.getUserType().equals("employee")) { // This is an employee that is logged in
 
-        if (user == null) {
-            context.status(HttpCode.NOT_FOUND);
-            context.result("Unable to find user");
-        } else {
-            context.json(user);
-            context.status(HttpCode.ACCEPTED);
+            User user = new User();
+            user.setUsername(context.pathParam("username"));
+
+            user = userService.getCustomer(user);
+            user.setPassword(null);
+
+            if (user == null) {
+                context.status(HttpCode.NOT_FOUND);
+                context.result("Unable to find user");
+            } else {
+                context.json(user);
+                context.status(HttpCode.ACCEPTED);
+            }
+        } else { //Not logged in
+            context.status(HttpStatus.UNAUTHORIZED_401);
+            context.result("You must be logged in to view a user.");
         }
     }
 

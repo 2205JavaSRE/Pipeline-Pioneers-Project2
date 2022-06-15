@@ -16,7 +16,6 @@ public class RequestMapping {
         app.post("/api/user", UserController::createUser);
 
         //Get user by username
-        // TODO: 6/13/2022 Ensure that database usernames are all lowercase and use iLike when using param.
         app.get("/api/user/{username}", UserController::getUser);
 
         //Create bank account
@@ -34,17 +33,20 @@ public class RequestMapping {
         //Withdrawing amount from bank account ID
         app.post("/api/bank_account/withdrawal", BankAccountController::withdrawal);
 
+
+        // TODO: 6/15/2022 Update and ensure security
         //Updating status with a bank ID and status
         app.patch("/api/bank_account", BankAccountController::updateStatus);
 
+        // TODO: 6/15/2022 Update and ensure security
         //Transfer money from account A to account B with Amount
-        app.post("/api/bank_account/transfer", BankAccountController::transfer);
-
+        app.post("/api/transfer", BankAccountController::transfer);
+        // TODO: 6/15/2022 Update and ensure security
         //View pending transfers
-        app.get("/api/bank_account/transfer", BankAccountController::viewPendingTransfer);
-
+        app.get("/api/transfer", BankAccountController::viewPendingTransfer);
+        // TODO: 6/15/2022 Update and ensure security
         //Approve/deny transfer
-        app.patch("/api/bank_account/transfer", BankAccountController::approveDenyTransfer);
+        app.patch("/api/transfer", BankAccountController::approveDenyTransfer);
 
         //Get all transactions employee-everyone, customer-themselves
         app.get("/api/transaction", TransactionController::getAllTransactions);

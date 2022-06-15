@@ -11,6 +11,7 @@ import com.revature.service.UserService;
 import com.revature.service.UserServiceImpl;
 import io.javalin.http.Context;
 import io.javalin.http.HttpCode;
+import org.eclipse.jetty.http.HttpStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,11 +71,56 @@ public class BankAccountController {
 
     public static void getAccount(Context context) {
         User user = context.sessionAttribute("User");
-        int accountId = Integer.parseInt(context.pathParam("id"));
-        if (user != null) {
-            Account account = accountService.getAccount(accountId);
-            context.json(account);
-            context.status(HttpCode.OK);
+        int accountId = -1;
+        try {
+            accountId = Integer.parseInt(context.pathParam("id"));
+        } catch (NumberFormatException exception) {
+            context.result("Number too large to be an account number.");
+            context.status(HttpStatus.BAD_REQUEST_400);
+        }
+
+        List<Account> userAccounts = accountService.listAccount(user.getUsername());
+
+
+        if (user != null) { //User is logged in
+
+            if (user.getUserType().equals("customer")) { //Logged in user is a customer
+                boolean hasAccess = false;
+
+                for (Account a : userAccounts) {
+                    if (a.getAccountId() == accountId) {
+                        hasAccess = true;
+                        break;
+                    }
+                }
+
+                if (hasAccess) {
+                    Account account = accountService.getAccount(accountId);
+                    for (User u : account.getOwner()) {
+                        u.setPassword(null);
+                    }
+                    context.json(account);
+                    context.status(HttpCode.OK);
+                } else {
+                    context.status(HttpCode.UNAUTHORIZED);
+                    context.result("You do not have access to view this account.");
+                }
+
+            } else { //Logged in as employee
+                Account account = accountService.getAccount(accountId);
+
+                if (account != null) {
+                    for (User u : account.getOwner()) {
+                        u.setPassword(null);
+                    }
+                    context.json(account);
+                    context.status(HttpCode.OK);
+                } else { //Account does not exist
+                    context.status(HttpCode.NOT_FOUND);
+                    context.result("Unable to find account.");
+                }
+
+            }
         } else {
             // User is not logged in
             context.status(HttpCode.FORBIDDEN);
@@ -103,6 +149,8 @@ public class BankAccountController {
         } else {
             try {
                 accountService.deposit(amount, accountService.getAccount(bankAccountID));
+                context.status(HttpStatus.ACCEPTED_202);
+                context.result("Deposit successful.");
             } catch (InvalidTransactionException e) {
                 context.status(HttpCode.FORBIDDEN);
                 context.result("Invalid deposit");
@@ -130,14 +178,16 @@ public class BankAccountController {
         }
 
         if (!hasAccess) {
-            context.result("You do not have access to deposit into this account.");
+            context.result("You do not have access to withdraw into this account.");
             context.status(HttpCode.FORBIDDEN);
         } else {
             try {
                 accountService.withdraw(amount, accountService.getAccount(bankAccountID));
+                context.status(HttpStatus.ACCEPTED_202);
+                context.result("Withdraw successful");
             } catch (InvalidTransactionException e) {
                 context.status(HttpCode.FORBIDDEN);
-                context.result("Invalid deposit");
+                context.result("Invalid withdraw");
             } catch (NotApprovedException e) {
                 context.status(HttpCode.FORBIDDEN);
                 context.result("Account not approved");

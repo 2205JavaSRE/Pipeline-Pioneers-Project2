@@ -4,19 +4,20 @@ public class TransferRequest {
 	private int id;
     private boolean approved = false;
     private double transferAmt;
-    private Account fromAccount;
-    private Account toAccount;
-    
+    private int fromAccount;
+    private int toAccount;
 
-	public TransferRequest(int id, boolean approved, double transferAmt, Account fromAccount, Account toAccount) {
-		super();
+
+	public TransferRequest() {
+	}
+
+	public TransferRequest(int id, boolean approved, double transferAmt, int fromAccount, int toAccount) {
 		this.id = id;
 		this.approved = approved;
 		this.transferAmt = transferAmt;
 		this.fromAccount = fromAccount;
 		this.toAccount = toAccount;
 	}
-
 
 	public int getId() {
 		return id;
@@ -47,26 +48,19 @@ public class TransferRequest {
 		this.transferAmt = transferAmt;
 	}
 
-
-	public Account getFromAccount() {
+	public int getFromAccount() {
 		return fromAccount;
 	}
 
-
-	public void setFromAccount(Account fromAccount) {
+	public void setFromAccount(int fromAccount) {
 		this.fromAccount = fromAccount;
 	}
 
-
-	public Account getToAccount() {
+	public int getToAccount() {
 		return toAccount;
 	}
 
-
-	public void setToAccount(Account toAccount) {
+	public void setToAccount(int toAccount) {
 		this.toAccount = toAccount;
 	}
-
-
-
 }

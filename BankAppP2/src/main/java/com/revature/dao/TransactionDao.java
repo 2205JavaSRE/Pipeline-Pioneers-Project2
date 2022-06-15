@@ -14,5 +14,6 @@ public interface TransactionDao {
 	public void intiateTransfer(TransferRequest tr);
 	public void completeTransfer(TransferRequest tr);
 	public List<TransferRequest> selectPendingTransfersByRecivingAccount(Account a);
+    public TransferRequest selectTransferRequestById(int id);
 
 }

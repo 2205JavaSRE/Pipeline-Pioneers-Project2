@@ -6,7 +6,7 @@ public class Account {
 
 // Initial variables
     private int accountId;
-    private boolean approved = false;
+    private boolean approved;
     private String nickname;
     private String type;
     private double balance;

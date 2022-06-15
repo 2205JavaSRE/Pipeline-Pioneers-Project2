@@ -139,7 +139,7 @@ public class AccountDaoImpl implements AccountDao{
             e.printStackTrace();
         }
         List<User> accountOwners = new ArrayList<>();
-        String newSql = "SELECT u.user_id, u.username, u.user_password, u.user_fname, u.user_lname  FROM project0.users u\n" +
+        String newSql = "SELECT *  FROM project0.users u\n" +
                 "JOIN project0.users_accounts ua ON u.user_id = ua.user_id \n" +
                 "JOIN project0.accounts a ON ua.account_id = a.account_id \n" +
                 "WHERE a.account_id = ?;";

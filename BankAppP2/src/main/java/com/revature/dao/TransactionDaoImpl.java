@@ -60,8 +60,8 @@ public class TransactionDaoImpl implements TransactionDao {
     @Override
     public List<Transaction> viewTransactionsByAccount(int accountId) {
         List<Transaction> transactionList = new ArrayList<>();
-        String sql = "SELECT t.account_id, t.transaction_type, t.transaction_amt, t.transaction_time FROM project0.users u" +
-                "JOIN project0.users_accounts ua ON u.user_id = ua.user_id" +
+        String sql = "SELECT * FROM project0.users u " +
+                "JOIN project0.users_accounts ua ON u.user_id = ua.user_id " +
                 "JOIN project0.transactions t ON ua.account_id = t.account_id " +
                 "WHERE t.account_id = ?;";
         Connection connection = ConnectionFactory.getConnection();
@@ -112,8 +112,8 @@ public class TransactionDaoImpl implements TransactionDao {
 				+ "VALUES (?,?,?)";
 		Connection connection = ConnectionFactory.getConnection();
 		 try (PreparedStatement ps = connection.prepareStatement(sql)) {
-	            ps.setInt(1, tr.getFromAccount().getAccountId());
-	            ps.setInt(2, tr.getToAccount().getAccountId());
+	            ps.setInt(1, tr.getFromAccount());
+	            ps.setInt(2, tr.getToAccount());
 	            ps.setDouble(3, tr.getTransferAmt());
 	            ps.execute();
 	        } catch (SQLException e) {
@@ -126,7 +126,7 @@ public class TransactionDaoImpl implements TransactionDao {
 		String sql = "DELETE FROM project0.transfer_requests WHERE transfer_id = ? ";
 		Connection connection = ConnectionFactory.getConnection();
 		 try (PreparedStatement ps = connection.prepareStatement(sql)) {
-	            ps.setInt(1, tr.getFromAccount().getAccountId());
+	            ps.setInt(1, tr.getId());
 	            ps.execute();
 	        } catch (SQLException e) {
 	            e.printStackTrace();
@@ -141,13 +141,14 @@ public class TransactionDaoImpl implements TransactionDao {
 		List<TransferRequest> transferList = new ArrayList<>();
 		Connection connection = ConnectionFactory.getConnection();
 		try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, a.getAccountId());
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 TransferRequest tr = new TransferRequest(rs.getInt("transfer_id"), 
                 		false,
                         rs.getDouble("transfer_amount"),
-                        aDao.selectAccount(rs.getInt("account_from")),
-                        aDao.selectAccount(rs.getInt("account_to")));
+                        rs.getInt("account_from"),
+                        rs.getInt("account_to"));
                 transferList.add(tr);
             }
         } catch (SQLException e) {
@@ -156,5 +157,27 @@ public class TransactionDaoImpl implements TransactionDao {
 		return transferList;
 	}
 
-	
+    @Override
+    public TransferRequest selectTransferRequestById(int id) {
+        Connection connection = ConnectionFactory.getConnection();
+        String sql = "SELECT * FROM project0.transfer_requests WHERE transfer_id = ?;";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, id);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                TransferRequest tr = new TransferRequest(rs.getInt("transfer_id"),
+                        false,
+                        rs.getDouble("transfer_amount"),
+                        rs.getInt("account_from"),
+                        rs.getInt("account_to"));
+                return tr;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

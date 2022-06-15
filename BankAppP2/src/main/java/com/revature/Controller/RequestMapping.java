@@ -54,7 +54,7 @@ public class RequestMapping {
 
 
         // TODO: 6/13/2022 implement metrics
-        app.get("/metrics", null);
+//        app.get("/metrics", null);
     }
 
 }

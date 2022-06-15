@@ -39,8 +39,8 @@ public class UserController {
         if (verifyUser(context) == null) {
                   UserService userService = new UserServiceImpl();
             if (userService.getCustomer(user) == null) {
-                //userService.createCustomer(User user);
-                //user = userService.getCustomer(user.getUsername());
+                userService.createCustomer(user);
+                user = userService.getCustomer(user);
                 if (user == null) {
                     context.status(HttpStatus.INTERNAL_SERVER_ERROR_500);
                     context.result("Unable to create account");
@@ -62,9 +62,13 @@ public class UserController {
 
     public static void getUser(Context context) {
         UserService userService = new UserServiceImpl();
-        User user = context.bodyAsClass(User.class);
 
+        User user = new User();
+        user.setUsername(context.pathParam("username"));
+
+        // TODO: 6/15/2022 make sure employee can view all, customer only views themselves.
         user = userService.getCustomer(user);
+        user.setPassword(null);
 
         if (user == null) {
             context.status(HttpCode.NOT_FOUND);

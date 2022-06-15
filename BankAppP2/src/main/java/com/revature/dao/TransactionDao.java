@@ -1,5 +1,6 @@
 package com.revature.dao;
 
+import com.revature.models.Account;
 import com.revature.models.Transaction;
 import com.revature.models.TransferRequest;
 
@@ -12,5 +13,6 @@ public interface TransactionDao {
     public List<Transaction> viewAllTransactions();
 	public void intiateTransfer(TransferRequest tr);
 	public void completeTransfer(TransferRequest tr);
+	public List<TransferRequest> selectPendingTransfersByRecivingAccount(Account a);
 
 }

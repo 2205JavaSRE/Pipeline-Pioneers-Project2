@@ -8,6 +8,7 @@ import com.revature.dao.CustomerDao;
 import com.revature.dao.CustomerDaoImpl;
 import com.revature.dao.TransactionDao;
 import com.revature.dao.TransactionDaoImpl;
+import com.revature.exceptions.UserExistsException;
 import com.revature.models.Account;
 import com.revature.models.Transaction;
 import com.revature.models.User;
@@ -18,7 +19,11 @@ public class UserServiceImpl implements UserService {
 	private static final TransactionDao tDao = new TransactionDaoImpl();
 	@Override
 	public void createCustomer(User c) {
-		 cDao.insertCustomer(c);
+		 try {
+			cDao.insertCustomer(c);
+		} catch (UserExistsException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

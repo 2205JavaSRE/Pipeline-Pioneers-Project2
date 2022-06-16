@@ -144,6 +144,6 @@ CREATE TABLE project0.users_accounts (
 	CONSTRAINT users_accounts_user_id_fkey FOREIGN KEY (user_id) REFERENCES project0.users(user_id)
 );
 
-INSERT INTO users (username, user_password, user_type) values ('admin', 'password', 'employee');
+INSERT INTO project0.users (username, user_password, user_type) values ('admin', 'password', 'employee');
 
 COMMIT;

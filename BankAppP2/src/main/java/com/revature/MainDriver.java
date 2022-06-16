@@ -1,16 +1,22 @@
 package com.revature;
 
 import com.revature.Controller.RequestMapping;
+import com.revature.util.Monitoring;
 import io.javalin.Javalin;
+import io.javalin.plugin.metrics.MicrometerPlugin;
 
 public class MainDriver {
 
 
     public static void main(String[] args) {
 
-        Javalin serverInstance = Javalin.create().start(7500);
+        Javalin serverInstance = Javalin.create(
+                javalinConfig -> {
+                    javalinConfig.registerPlugin(new MicrometerPlugin(Monitoring.getRegistry()));
+                }
+        ).start(7500);
 
-        RequestMapping.configureRoutes(serverInstance);
+        RequestMapping.configureRoutes(serverInstance, Monitoring.getRegistry());
 
 
     }

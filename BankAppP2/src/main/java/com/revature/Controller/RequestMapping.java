@@ -1,10 +1,11 @@
 package com.revature.Controller;
 
 import io.javalin.Javalin;
+import io.micrometer.prometheus.PrometheusMeterRegistry;
 
 public class RequestMapping {
 
-    public static void configureRoutes(Javalin app) {
+    public static void configureRoutes(Javalin app, PrometheusMeterRegistry registry) {
 
         //Login
         app.post("/api/login", UserController::login);
@@ -51,9 +52,10 @@ public class RequestMapping {
         //Get all transaction from a select account
         app.get("/api/transaction/{id}", TransactionController::getTransactions);
 
-
-        // TODO: 6/13/2022 implement metrics
-//        app.get("/metrics", null);
+        //Scraping registry to provide Prometheus with data.
+        app.get("/metrics", context -> {
+            context.result(registry.scrape());
+        });
     }
 
 }

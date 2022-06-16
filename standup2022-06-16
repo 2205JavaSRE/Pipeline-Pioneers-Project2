@@ -1,0 +1,8 @@
+- finished out program functionallity
+- reviewed code
+- tightened security
+- 
+- Plan: work out SLIs, develop monitoring 
+- Dockerize the database and API
+- build yml database, API, database-service, API-service
+- 

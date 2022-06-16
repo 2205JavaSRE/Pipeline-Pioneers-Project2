@@ -1,3 +1,4 @@
+BEGIN;
 -- DROP SCHEMA project0;
 
 CREATE SCHEMA project0 AUTHORIZATION postgres;
@@ -142,3 +143,7 @@ CREATE TABLE project0.users_accounts (
 	CONSTRAINT users_accounts_account_id_fkey FOREIGN KEY (account_id) REFERENCES project0.accounts(account_id),
 	CONSTRAINT users_accounts_user_id_fkey FOREIGN KEY (user_id) REFERENCES project0.users(user_id)
 );
+
+INSERT INTO users (username, user_password, user_type) values ('admin', 'password', 'employee');
+
+COMMIT;

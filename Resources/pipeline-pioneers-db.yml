@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pipeline-db
+  namespace: stuart-space
+  labels:
+    app: pipeline-postgres
+spec:
+  containers:
+    - name: postgres-container
+      image: zachburnett/postges-pipline-pioneers 
+      ports: 
+        - containerPort: 5432
+      env:
+        - name: POSTGRES_USER
+          value: postgres
+        - name: POSTGRES_PASSWORD
+          value: password
+        - name: PGDATA 
+          value: /var/lib/postgresql/data/pgdata
+      volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: db-data
+  volumes:
+    - name: db-data
+      emptyDir: {}

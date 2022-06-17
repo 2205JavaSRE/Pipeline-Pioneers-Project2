@@ -1,8 +1,8 @@
 FROM openjdk:8-jre
 
-ENV db_url=$db_url
-ENV db_username=$db_username
-ENV db_password=$db_password
+ENV db_username=postgres
+ENV db_password=password
+ENV db_url=jdbc:postgresql://pipeline-postgres:5432/postgres
 
 COPY target/BankAppP2-1.0-SNAPSHOT.jar demo.jar
 

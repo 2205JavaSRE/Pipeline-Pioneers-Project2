@@ -23,6 +23,6 @@ spec:
           name: db-data
   volumes:
     - name: db-data
-      awsElasticBlockStore:
-        volumeID: "vol-0588f9f5be435903c"
-        fsType: ext4
+      persistentVolumeClaim:
+        claimName: pipeline-pvc
+

@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: pipeline-monitor
+  namespace: pipeline-pioneers
+  labels:
+    app: pipeline-pioneers-app
+    prometheus: devops
+spec:
+  endpoints:
+  - port: http
+    interval: 15s
+    path: /metrics
+  namespaceSelector:
+    matchNames:
+    - pipeline-pioneers
+  selector:
+    matchLabels:
+      app: pipeline-pioneers-app

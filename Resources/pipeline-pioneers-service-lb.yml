@@ -10,5 +10,7 @@ spec:
   selector: 
     app: pipeline-pioneers-app
   ports: 
-    - port: 7500
-      targetPort: 7500 
+    - port: 80
+      targetPort: 7500
+      protocol: TCP
+      name: http

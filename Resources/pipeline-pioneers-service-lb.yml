@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service 
+metadata: 
+  name: pipeline-pioneers-lb
+  namespace: pipeline-pioneers
+  labels: 
+    app: pipeline-pioneers-app
+spec: 
+  type: LoadBalancer #If you don't specify the type, it defaults to ClusterIP
+  selector: 
+    app: pipeline-pioneers-app
+  ports: 
+    - port: 7500
+      targetPort: 7500 

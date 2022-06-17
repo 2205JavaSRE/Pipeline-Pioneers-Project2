@@ -17,6 +17,9 @@ public class Monitoring {
     public static PrometheusMeterRegistry registry = new PrometheusMeterRegistry(PrometheusConfig.DEFAULT);
 
     public static PrometheusMeterRegistry getRegistry() {
+
+        registry.config().commonTags("application", "Pipeline-Bank");
+
         new ClassLoaderMetrics().bindTo(registry);
         new JvmMemoryMetrics().bindTo(registry);
         new JvmGcMetrics().bindTo(registry);

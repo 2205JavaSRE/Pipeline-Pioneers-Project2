@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pipeline-pioneers-deployment
+  namespace: pipeline-pioneers #If you don't specify it switches to default one. 
+  labels:
+    app: pipeline-pioneers-app
+
+spec: # Specifications for the deployment.
+  replicas: 3
+  selector:
+    matchLabels:
+      app: pipeline-pioneers-app # has to match the template labels app
+  template:
+    metadata:
+      labels:
+        app: pipeline-pioneers-app
+    spec: # specification for the pod itself now
+      containers:
+        - name: pipeline-pioneers-deployment
+          image: zachburnett/pipeline-pioneers
+          ports:
+            - containerPort: 7500
+          imagePullPolicy: Always # Optional spec, whenever we redeploy it will always pull the image from the remote repo
+

@@ -1,0 +1,7 @@
+- pipeline set up to deploy application in k8 cluster
+- database deployed
+- blockers persitant storage set up for DB
+- 
+-
+- SLIs: error rate, latencies, system trough-put requests per second
+- 

@@ -1,5 +1,6 @@
 package com.revature.util;
 
+import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.binder.jvm.ClassLoaderMetrics;
 import io.micrometer.core.instrument.binder.jvm.JvmGcMetrics;
 import io.micrometer.core.instrument.binder.jvm.JvmMemoryMetrics;
@@ -15,6 +16,17 @@ import java.io.File;
 public class Monitoring {
 
     public static PrometheusMeterRegistry registry = new PrometheusMeterRegistry(PrometheusConfig.DEFAULT);
+    
+    public static Counter httpRequestCounter = Counter
+			.builder("http_requests")
+			.description("Track number of HTTP requests")
+			.tag("purpose", "HTTP request tracking")
+			.register(registry);
+    public static Counter errorCounter = Counter
+			.builder("500_server_error")
+			.description("Track number of server errors")
+			.tag("purpose", "HTTP error tracking")
+			.register(registry);
 
     public static PrometheusMeterRegistry getRegistry() {
 
@@ -31,6 +43,12 @@ public class Monitoring {
         return registry;
     }
 
-
+    public static void incrementRequestCounter() {
+		httpRequestCounter.increment(1);
+	}
+    
+    public static void incrementErrorCounter() {
+		errorCounter.increment(1);
+	}
 
 }

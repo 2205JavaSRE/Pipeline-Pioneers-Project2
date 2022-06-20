@@ -33,7 +33,6 @@ public class RequestMapping {
 
         });
 
-        // TODO: 6/20/2022
         //Creating a user
         app.post("/api/user", context -> {
             Monitoring.incrementRequestCounter();

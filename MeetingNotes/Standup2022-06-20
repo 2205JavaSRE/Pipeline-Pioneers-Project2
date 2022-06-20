@@ -1,0 +1,2 @@
+set up PVC connected to Grafana
+todo: create grafana metrics, rebuild DB with 200 Mi insted of 2Gi

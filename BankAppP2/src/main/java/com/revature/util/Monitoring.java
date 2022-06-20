@@ -18,12 +18,12 @@ public class Monitoring {
     public static PrometheusMeterRegistry registry = new PrometheusMeterRegistry(PrometheusConfig.DEFAULT);
     
     public static Counter httpRequestCounter = Counter
-			.builder("http_requests")
+			.builder("pipeline_pioneers_http_requests")
 			.description("Track number of HTTP requests")
 			.tag("purpose", "HTTP request tracking")
 			.register(registry);
     public static Counter errorCounter = Counter
-			.builder("500_server_error")
+			.builder("pipeline_pioneers_500_server_error")
 			.description("Track number of server errors")
 			.tag("purpose", "HTTP error tracking")
 			.register(registry);

@@ -6,10 +6,11 @@ pipeline {
 		dockerHubCredentials='docker' // This is in Jenkins credentials
 	}
 	stages {
-		stage("Maven build")
-		steps {
-			sh 'mvn clean build'
-		}
+		stage("Maven build"){
+				steps {
+					sh 'mvn clean build'
+				}
+			}
 		stage("Docker build") {
 			steps {
 				script {

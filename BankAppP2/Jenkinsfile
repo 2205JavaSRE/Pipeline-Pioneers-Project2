@@ -14,7 +14,7 @@ pipeline {
 		stage("Docker build") {
 			steps {
 				script {
-					dockerImage = docker.build "$registry"
+					dockerImage = docker.build("$registry", "./BankAppP2")
 				}
 			}
 		}

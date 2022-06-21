@@ -1,0 +1,36 @@
+pipeline {
+	agent any
+	environment {
+		registry='zachburnett/pipeline-pioneers'
+		dockerImage=''
+		dockerHubCredentials='docker' // This is in Jenkins credentials
+	}
+	stages {
+		stage("Maven build")
+		steps {
+			sh 'mvn clean build'
+		}
+		stage("Docker build") {
+			steps {
+				script {
+					dockerImage = docker.build "$registry"
+				}
+			}
+		}
+		stage("pushing to Docker Hub") {
+			steps {
+				script {
+					docker.withRegisty('',dockerHubCredentials) {
+						dockerImage.push("$currentBuild.number")
+						dockerImage.push("latest")
+					}
+				}
+			}
+		}
+		stage("Deploying to Kubernetes") {
+			steps{
+				sh "kubectl set image -n pipeline-pioneers deployment/pipeline-pioneers-deployment pipeline-pioneers-deployment=$registry$currentBuild.number"
+			}
+		}
+	}
+}

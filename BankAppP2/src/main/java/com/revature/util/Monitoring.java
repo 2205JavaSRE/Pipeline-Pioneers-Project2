@@ -28,6 +28,13 @@ public class Monitoring {
 			.tag("purpose", "HTTP error tracking")
 			.register(registry);
 
+    public static Counter highLatencyCounter = Counter
+            .builder("pipeline_pioneers_high_latency_counter")
+            .description("Track latency over 200ms")
+            .tag("purpose", "Latency tracking")
+            .register(registry);
+
+
     public static PrometheusMeterRegistry getRegistry() {
 
         registry.config().commonTags("application", "Pipeline-Bank");
@@ -50,5 +57,9 @@ public class Monitoring {
     public static void incrementErrorCounter() {
 		errorCounter.increment(1);
 	}
+
+    public static void incrementHighLatencyCounter() {
+        highLatencyCounter.increment(1);
+    }
 
 }

@@ -13,8 +13,11 @@ public class MainDriver {
         Javalin serverInstance = Javalin.create(
                 javalinConfig -> {
                     javalinConfig.registerPlugin(new MicrometerPlugin(Monitoring.getRegistry()));
-                    javalinConfig.requestLogger((context, ms) -> {
-                        if (ms > 200) Monitoring.incrementHighLatencyCounter();
+                    javalinConfig.requestLogger((context, ms) -> { //Logging high latency requests
+                        if (ms > 200 && !context.path().equals("/metrics")
+                                && context.res.getStatus() != 404
+                                && context.res.getStatus() != 500)
+                            Monitoring.incrementHighLatencyCounter();
                     });
                 }
         ).start(7500);

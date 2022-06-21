@@ -14,7 +14,7 @@ public class MainDriver {
                 javalinConfig -> {
                     javalinConfig.registerPlugin(new MicrometerPlugin(Monitoring.getRegistry()));
                     javalinConfig.requestLogger((context, ms) -> {
-                        if (ms > 0.2) Monitoring.incrementHighLatencyCounter();
+                        if (ms > 200) Monitoring.incrementHighLatencyCounter();
                     });
                 }
         ).start(7500);

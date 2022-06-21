@@ -1,0 +1,4 @@
+- monitoring functionality for getting, error/success rate, cpu useage per pod and up time per pod.
+- set up garfana dashboard
+- 
+- TODO: defining SLO's based on SLIs

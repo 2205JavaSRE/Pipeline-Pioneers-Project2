@@ -30,7 +30,7 @@ pipeline {
 		}
 		stage("Deploying to Kubernetes") {
 			steps{
-				sh "kubectl set image -n pipeline-pioneers deployment/pipeline-pioneers-deployment pipeline-pioneers-deployment=$registry$currentBuild.number"
+				sh "kubectl set image -n pipeline-pioneers deployment/pipeline-pioneers-deployment pipeline-pioneers-deployment=$registry:$currentBuild.number"
 			}
 		}
 	}

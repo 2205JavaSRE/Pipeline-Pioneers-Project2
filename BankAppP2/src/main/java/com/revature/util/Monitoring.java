@@ -33,6 +33,12 @@ public class Monitoring {
             .description("Track latency over 200ms")
             .tag("purpose", "Latency tracking")
             .register(registry);
+    
+    public static Counter totalLatencyCounter = Counter
+            .builder("pipeline_pioneers_total_latency_counter")
+            .description("Track total latency in ms")
+            .tag("purpose", "Latency tracking")
+            .register(registry);
 
 
     public static PrometheusMeterRegistry getRegistry() {
@@ -61,5 +67,10 @@ public class Monitoring {
     public static void incrementHighLatencyCounter() {
         highLatencyCounter.increment(1);
     }
+
+	public static void incrementTotalLatency(float ms) {
+		totalLatencyCounter.increment(ms);
+		
+	}
 
 }

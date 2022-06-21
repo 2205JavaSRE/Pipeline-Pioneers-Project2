@@ -14,6 +14,10 @@ public class MainDriver {
                 javalinConfig -> {
                     javalinConfig.registerPlugin(new MicrometerPlugin(Monitoring.getRegistry()));
                     javalinConfig.requestLogger((context, ms) -> { //Logging high latency requests
+                    	if(!context.path().equals("/metrics")
+                                && context.res.getStatus() != 404
+                                && context.res.getStatus() != 500)
+                    		Monitoring.incrementTotalLatency(ms);
                         if (ms > 200 && !context.path().equals("/metrics")
                                 && context.res.getStatus() != 404
                                 && context.res.getStatus() != 500)

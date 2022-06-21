@@ -8,7 +8,7 @@ pipeline {
 	stages {
 		stage("Maven build"){
 				steps {
-					sh '/usr/bin/mvn clean build'
+					sh '/usr/bin/mvn clean package'
 				}
 			}
 		stage("Docker build") {

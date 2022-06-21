@@ -56,9 +56,13 @@ public class BankAccountController {
 
     public static void getAccounts(Context context) {
         User user = context.sessionAttribute("User");
-        if (user != null) {
+        if (user != null && user.getUserType().equals("customer")) {
             List<Account> accounts = accountService.listAccount(user.getUsername());
             context.json(accounts);
+            context.status(HttpCode.OK);
+        } else if (user != null && user.getUserType().equals("employee")){
+        	List<Account> accounts = accountService.listAccount();
+        	context.json(accounts);
             context.status(HttpCode.OK);
         } else {
             // User is not logged in

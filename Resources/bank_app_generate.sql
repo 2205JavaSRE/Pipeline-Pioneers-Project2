@@ -73,7 +73,7 @@ CREATE SEQUENCE project0.users_user_id_seq
 
 CREATE TABLE project0.accounts (
 	account_id serial4 NOT NULL,
-	approved bool NOT NULL,
+	approved bool,
 	account_nickname varchar(30) NOT NULL,
 	account_type varchar(30) NOT NULL,
 	account_balance float8 NOT NULL,

@@ -23,7 +23,8 @@ public class Sessions {
 	public JDBCSessionDataStoreFactory jdbcDataStoreFactory() {
 		
 	    DatabaseAdaptor databaseAdaptor = new DatabaseAdaptor();
-	    databaseAdaptor.setDriverInfo("org.postgresql.Driver", System.getenv("db_url"));
+	    databaseAdaptor.setDriverInfo("org.postgresql.Driver", (System.getenv("db_url") + "?user=" 
+	    		+ System.getenv("db_username") + "&password=" + System.getenv("db_password")));
 	    // databaseAdaptor.setDatasource(myDataSource); // you can set data source here (for connection pooling, etc)
 	    JDBCSessionDataStoreFactory jdbcSessionDataStoreFactory = new JDBCSessionDataStoreFactory();
 	    jdbcSessionDataStoreFactory.setDatabaseAdaptor(databaseAdaptor);

@@ -1,0 +1,9 @@
+- finished upgrafana dashboard 
+- defined SLOs 
+- setup Jenkinsfile
+- full Jenkins pipeline
+- swiched to database session storing
+- modified databate to remove a Not Null constraint
+
+- TODO: set-up presintation
+- TODO: add dummy data.

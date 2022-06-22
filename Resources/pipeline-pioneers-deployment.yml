@@ -22,8 +22,8 @@ spec: # Specifications for the deployment.
           ports:
             - containerPort: 7500
           imagePullPolicy: Always # Optional spec, whenever we redeploy it will always pull the image from the remote repo
-	    resources:
-		limits:
-		  memory: "128Mi"
-		  cpu: "500m"
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
 

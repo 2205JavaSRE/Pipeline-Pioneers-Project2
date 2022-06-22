@@ -2,6 +2,8 @@ package com.revature;
 
 import com.revature.Controller.RequestMapping;
 import com.revature.util.Monitoring;
+import com.revature.util.Sessions;
+
 import io.javalin.Javalin;
 import io.javalin.plugin.metrics.MicrometerPlugin;
 
@@ -9,9 +11,11 @@ public class MainDriver {
 
 
     public static void main(String[] args) {
+    	Sessions session = new Sessions();
 
         Javalin serverInstance = Javalin.create(
                 javalinConfig -> {
+                	javalinConfig.sessionHandler(session::sqlSessionHandler);
                     javalinConfig.registerPlugin(new MicrometerPlugin(Monitoring.getRegistry()));
                     javalinConfig.requestLogger((context, ms) -> { //Logging high latency requests
                     	if(!context.path().equals("/metrics")

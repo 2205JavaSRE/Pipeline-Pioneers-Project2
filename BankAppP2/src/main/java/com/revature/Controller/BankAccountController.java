@@ -23,7 +23,7 @@ public class BankAccountController {
     public static void createAccount(Context context) {
 
 
-        User user = context.sessionAttribute("User");
+        User user = (User) context.req.getSession().getAttribute("User");
         List<User> userList = new ArrayList<>();
 
         if (user != null) { //User is logged in
@@ -55,7 +55,7 @@ public class BankAccountController {
     }
 
     public static void getAccounts(Context context) {
-        User user = context.sessionAttribute("User");
+        User user = (User) context.req.getSession().getAttribute("User");
         if (user != null && user.getUserType().equals("customer")) {
             List<Account> accounts = accountService.listAccount(user.getUsername());
             for (Account a : accounts) {
@@ -80,7 +80,7 @@ public class BankAccountController {
     }
 
     public static void getAccount(Context context) {
-        User user = context.sessionAttribute("User");
+        User user = (User) context.req.getSession().getAttribute("User");
         int accountId = -1;
         try {
             accountId = Integer.parseInt(context.pathParam("id"));
@@ -139,7 +139,7 @@ public class BankAccountController {
     }
 
     public static void deposit(Context context) {
-        User user = context.sessionAttribute("User");
+        User user = (User) context.req.getSession().getAttribute("User");
         int bankAccountID = Integer.parseInt(context.formParam("id"));
         double amount = Double.parseDouble(context.formParam("amount"));
         List<Account> userAccounts = accountService.listAccount(user.getUsername());
@@ -173,7 +173,7 @@ public class BankAccountController {
     }
 
     public static void withdrawal(Context context) {
-        User user = context.sessionAttribute("User");
+        User user = (User) context.req.getSession().getAttribute("User");
         int bankAccountID = Integer.parseInt(context.formParam("id"));
         double amount = Double.parseDouble(context.formParam("amount"));
         List<Account> userAccounts = accountService.listAccount(user.getUsername());
@@ -206,7 +206,7 @@ public class BankAccountController {
     }
 
     public static void updateStatus(Context context) {
-    	User u = context.sessionAttribute("User");
+    	User u = (User) context.req.getSession().getAttribute("User");
         if (u.getUserType().equals("employee")) {
 			Account updatedAccount = context.bodyAsClass(Account.class);
 			userService.approveDenyAccount(updatedAccount, updatedAccount.isApproved());
@@ -220,7 +220,7 @@ public class BankAccountController {
 
     public static void transfer(Context context) {
     	
-    	User user = context.sessionAttribute("User");
+    	User user = (User) context.req.getSession().getAttribute("User");
     	boolean hasAccess = false;
     	TransferRequest transferRequest = null;
         if (user != null) {
@@ -246,7 +246,7 @@ public class BankAccountController {
     }
 
     public static void viewPendingTransfer(Context context) {
-    	User user = context.sessionAttribute("User");
+    	User user = (User) context.req.getSession().getAttribute("User");
     	boolean hasAccess = false;
     	Account account = null;
         if (user != null) {
@@ -275,7 +275,7 @@ public class BankAccountController {
 
     public static void approveDenyTransfer(Context context) {
 
-    	User user = context.sessionAttribute("User");
+    	User user = (User) context.req.getSession().getAttribute("User");
     	boolean hasAccess = false;
     	TransferRequest transferRequest = null;
         if (user != null) {

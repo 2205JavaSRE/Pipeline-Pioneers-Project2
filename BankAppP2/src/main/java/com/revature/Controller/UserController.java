@@ -28,8 +28,8 @@ public class UserController {
     }
 
     public static void logout(Context context) {
-        context.consumeSessionAttribute("User");
-        context.status(HttpCode.IM_A_TEAPOT);
+    	context.req.getSession().invalidate();
+        context.status(200);
         context.result("Successfully logged out");
     }
 
@@ -89,6 +89,6 @@ public class UserController {
     }
 
     public static User verifyUser(Context context) {
-        return context.sessionAttribute("User");
+        return (User) context.req.getSession().getAttribute("User");
     }
 }

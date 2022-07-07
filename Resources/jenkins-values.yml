@@ -1,0 +1,6 @@
+persistence:
+  existingClaim: jenkins-pvc
+  
+controller:
+  serviceType: LoadBalancer
+  
